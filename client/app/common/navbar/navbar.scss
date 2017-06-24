@@ -1,0 +1,30 @@
+@import '../common';
+
+.navbar {
+  background-color: $primaryColor;
+
+  .nav-links,
+  .logo {
+    display: inline-block;
+  }
+
+  .logo {
+    color: $lightTextColor;
+    float: left;
+    width:60%;
+  }
+
+  .nav-links {
+    float: right;
+    font-size: 20px;
+    width:35%;
+    text-align: right;
+    vertical-align: middle;
+    line-height: 80px;
+
+  }
+
+  .nav-links p {
+    color: $lightTextColor;
+  }
+}

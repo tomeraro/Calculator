@@ -1,0 +1,49 @@
+<navbar></navbar>
+
+<div class="container text-center">
+
+    <div id="calc-bg">
+
+      <div class="calculate-inline">
+
+        <div class="row" id="result">{{$ctrl.output}}</div>
+
+        <div class="row row-common">
+          <button class="reset" id="reset" ng-click="$ctrl.resetCalculator()">Reset</button>
+          <button value="%" class="btn-warning divide" ng-click="$ctrl.operationClick('divide')">/</button>
+        </div>
+
+        <div class="row row-common">
+          <button value="9" class="num" ng-click="$ctrl.userInput(9)">9</button>
+          <button value="8" class="num" ng-click="$ctrl.userInput(8)">8</button>
+          <button value="7" class="num" ng-click="$ctrl.userInput(7)">7</button>
+          <button value="X" class="btn-warning operator" ng-click="$ctrl.operationClick('multiply')">X</button>
+        </div>
+
+        <div class="row row-common">
+          <button value="6" class="num-bg num" ng-click="$ctrl.userInput(6)">6</button>
+          <button value="5" class="num-bg num" ng-click="$ctrl.userInput(5)">5</button>
+          <button value="4" class="num-bg num" ng-click="$ctrl.userInput(4)">4</button>
+          <button value="-" class="btn-warning operator" ng-click="$ctrl.operationClick('subtract')">-</button>
+        </div>
+
+
+        <div class="row row-common">
+          <button value="3" class="num-bg num" ng-click="$ctrl.userInput(3)">3</button>
+          <button value="2" class="num-bg num" ng-click="$ctrl.userInput(2)">2</button>
+          <button value="1" class="num-bg num" ng-click="$ctrl.userInput(1)">1</button>
+          <button value="+" class="btn-warning operator" ng-click="$ctrl.operationClick('add')">+</button>
+        </div>
+
+        <div class="row row-common">
+          <button value="0" class="btn-style num-bg num" ng-click="$ctrl.userInput(0)">0</button>
+          <button value="." class="btn-style num-bg num" ng-click="$ctrl.userInput('.')">.</button>
+          <button value="=" id="calculate" class="btn-warning operator" ng-click="$ctrl.calculateResult()">=</button>
+        </div>
+
+      </div>
+
+  </div>
+
+  <h6 class="hidden-error" id="hidden-error"></h6>
+</div>
