@@ -6,7 +6,7 @@ let calculatorModule = angular.module('calculator', [
   uiRouter
 ])
 
-  .config(($stateProvider) => {
+.config(($stateProvider) => {
     "ngInject";
     $stateProvider
       .state('calculator', {
@@ -16,6 +16,8 @@ let calculatorModule = angular.module('calculator', [
   })
 
 .component('calculator', calculatorComponent)
+
+
 
 .name;
 

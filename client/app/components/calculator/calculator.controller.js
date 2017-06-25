@@ -1,4 +1,5 @@
-//according to solid>> CalculatorController class have one roll: do calculations. I can reuse calculator component in another pages
+//Calculator class manage the UI executions.
+//I've separated the UI manipulations from the operations Logic
 class CalculatorController {
 
   constructor() {
@@ -8,17 +9,17 @@ class CalculatorController {
     this.numValue = null; //right number
     this.isNewNumber = true;
     this.currentOperationToExecute = null;
-    this.resultUntilNow = null; ///the result until now and left number for the next execution
-    this.saveLastOperation = null; //save last operation to execute when clicking =,=,=, etc.
+    this.resultUntilNow = null; ///the result until now. (left number for next operation)
+    this.saveLastOperation = null; //save last operation if user clicked =,=,=
 
-    //separate class who only make the operations. "black box" that get numbers and calculate them
+    //the separate Logic class. "black box" that get numbers and calculate them
     this.operationsClass = new MakeOperations();
   }
 
-  //get value when user click on number
+  //execute when user click on number
   userInput = function(btnValue)
   {
-    if (this.isNewNumber || this.output == "0" || this.output == "")
+    if (this.isNewNumber || this.output == "0")
     {
       this.isNewNumber = false;
       this.output = btnValue;
@@ -35,18 +36,19 @@ class CalculatorController {
     this.output = this.resultUntilNow; //update output to previous calculation
     this.isNewNumber = true;
     this.numValue = null;
-    this.currentOperationToExecute = operationType;
+    this.currentOperationToExecute = operationType; //save current operation
   };
 
   //do last calculation
   lastCalculation = function()
   {
+    //if num value is not null
     if (this.numValue)
     {
       if(this.resultUntilNow)
         this.resultUntilNow = this.operationsClass.operations[this.currentOperationToExecute].operation(this.resultUntilNow, this.numValue);
       else
-        this.resultUntilNow = this.numValue;
+        this.resultUntilNow = this.numValue; //for the first operation only
     }
   };
 
@@ -55,30 +57,30 @@ class CalculatorController {
   {
     if (!this.isNewNumber)
     {
-      this.numValue = Number(this.output);
-      this.lastValue = this.numValue;
+      this.numValue = Number(this.output); //output is the 'right number'
+      this.lastValue = this.numValue; //save last value in case we need it later
     }
 
     if(this.currentOperationToExecute != null)
     {
       //save last operation in case we need it later
-      if (this.currentOperationToExecute == this.operationsClass.operations.add.name)
-      {
-        this.saveLastOperation = 'add';
-      }
-      else if (this.currentOperationToExecute == this.operationsClass.operations.subtract.name)
-      {
-        this.saveLastOperation = 'subtract';
-      }
-      else if (this.currentOperationToExecute == this.operationsClass.operations.multiply.name)
-      {
-        this.saveLastOperation = 'multiply';
-      }
-      else if (this.currentOperationToExecute == this.operationsClass.operations.divide.name)
-      {
-        this.saveLastOperation = 'divide';
-      }
-
+      this.saveLastOperation = this.currentOperationToExecute;
+      //if (this.currentOperationToExecute == this.operationsClass.operations.add.name)
+      //{
+      //  this.saveLastOperation = 'add';
+      //}
+      //else if (this.currentOperationToExecute == this.operationsClass.operations.subtract.name)
+      //{
+      //  this.saveLastOperation = 'subtract';
+      //}
+      //else if (this.currentOperationToExecute == this.operationsClass.operations.multiply.name)
+      //{
+      //  this.saveLastOperation = 'multiply';
+      //}
+      //else if (this.currentOperationToExecute == this.operationsClass.operations.divide.name)
+      //{
+      //  this.saveLastOperation = 'divide';
+      //}
       this.resultUntilNow = this.operationsClass.operations[this.currentOperationToExecute].operation(this.resultUntilNow, this.numValue);
     }
     else //user clicked = more than one time in a row
@@ -144,9 +146,7 @@ export class MakeOperations {
         name: 'divide',
         operation: function (a, b) {
           if(b == 0){
-            $("#hidden-error").html("error dividing");
-            alert("you can't devide by 0. try again");
-            return a;
+            return NaN;
           }
           return a / b;
         }
