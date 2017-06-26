@@ -7,11 +7,17 @@ import Ioperations from './Ioperations';
 
 class Add extends Ioperations {
 
-  constructor() { super(); }
+  constructor() {
+    'ngInject';
+
+    super();
+
+  }
 
   operation(a,b){
     return a + b;
   }
+
 
 }
 

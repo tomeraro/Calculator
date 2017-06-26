@@ -7,6 +7,8 @@ import Ioperations from './Ioperations';
 class Divide extends Ioperations {
 
   constructor(){
+    'ngInject';
+
     super();
   }
 

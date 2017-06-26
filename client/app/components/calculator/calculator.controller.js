@@ -1,12 +1,11 @@
-import ContextClass from './operations/ContextClass'
-
 //Calculator class manage the UI executions.
 //I've separated the UI manipulations from the operations Logic
 class CalculatorController {
 
-  constructor() {
-    this.name = "calculatorComponent"; //just for unit testing
+  constructor(Add, Subtract, Multiply, Divide) {
+    'ngInject';
 
+    this.name = "calculatorComponent"; //just for unit testing
     this.output = "0";
     this.numValue = null; //right number
     this.isNewNumber = true;
@@ -14,18 +13,22 @@ class CalculatorController {
     this.resultUntilNow = null; ///the result until now. (left number for next operation)
     this.saveLastOperation = null; //save last operation if user clicked =,=,=
 
-    //**** separate logic from UI ****// "black box" that get numbers and calculate them
-    this.Add = new ContextClass('add');
-    this.Subtract = new ContextClass('subtract');
-    this.Multiply = new ContextClass('multiply');
-    this.Divide = new ContextClass('divide');
-
-
+    //**** separate logic from UI - All Operations are Singleton Services ****//
+    this._Add = Add;
+    this._Subtract = Subtract;
+    this._Multiply = Multiply;
+    this._Divide = Divide;
   }
 
   //execute when user click on number
   userInput = function(btnValue)
   {
+    //when user hit new number after equal function executed
+    if(this.currentOperationToExecute == null){
+      this.resultUntilNow = null;
+      this.numValue = null;
+    }
+
     if (this.isNewNumber || this.output == "0")
     {
       this.isNewNumber = false;
@@ -49,13 +52,17 @@ class CalculatorController {
   //do last calculation
   lastCalculation = function()
   {
-    //if num value is not null
-    if (this.numValue)
+    if (this.numValue) //if num value is not null
     {
-      if(this.resultUntilNow)
-        this.makeCalculation(this.currentOperationToExecute, this.resultUntilNow, this.numValue);
-      else
-        this.resultUntilNow = this.numValue; //for the first operation only
+      if(this.resultUntilNow){
+        if(this.currentOperationToExecute in this.operationsObject) // check object literal contains operation
+          this.resultUntilNow = this.operationsObject[this.currentOperationToExecute].operation(this.resultUntilNow, this.numValue);
+        else {
+          alert('Your Last Operation is Unknown! Calculator will restart now..');
+          this.resetCalculator();
+        }
+      }
+    else this.resultUntilNow = this.numValue; //for the first operation only
     }
   };
 
@@ -72,7 +79,13 @@ class CalculatorController {
     {
       //save last operation in case we need it later
       this.saveLastOperation = this.currentOperationToExecute;
-      this.makeCalculation(this.currentOperationToExecute, this.resultUntilNow, this.numValue);
+
+      if(this.currentOperationToExecute in this.operationsObject) // check object literal contains operation
+        this.resultUntilNow = this.operationsObject[this.currentOperationToExecute].operation(this.resultUntilNow, this.numValue);
+      else {
+        alert('Your Last Operation is Unknown! Calculator will restart now..');
+        this.resetCalculator();
+      }
     }
     else //user clicked = more than one time in a row
     {
@@ -80,7 +93,12 @@ class CalculatorController {
       {
         if (this.resultUntilNow)
         {
-          this.makeCalculation(this.saveLastOperation, this.resultUntilNow, this.lastValue);
+          if(this.saveLastOperation in this.operationsObject) // check object literal contains operation
+            this.resultUntilNow = this.operationsObject[this.saveLastOperation].operation(this.resultUntilNow, this.lastValue);
+          else {
+            alert('Your Last Operation is Unknown! Calculator will restart now..');
+            this.resetCalculator();
+          }
         }
       }
       else
@@ -104,24 +122,26 @@ class CalculatorController {
     this.isNewNumber = true;
   };
 
-
-  //check the operation and execute according to our stracture
-  makeCalculation = function(operation, leftValue, rightValue)
-  {
-    if(operation == 'add')
-      this.resultUntilNow = this.Add.operationProperty.operation(leftValue, rightValue);
-
-    if(operation == 'subtract')
-      this.resultUntilNow = this.Subtract.operationProperty.operation(leftValue, rightValue);
-
-    if(operation == 'multiply')
-      this.resultUntilNow = this.Multiply.operationProperty.operation(leftValue, rightValue);
-
-    if(operation == 'divide')
-      this.resultUntilNow = this.Divide.operationProperty.operation(leftValue, rightValue);
-  }
-
+  //check the operation and execute
+  //in previous version operationsObject was makeCalculation()
+  operationsObject = {
+    add: {
+      name: 'add',
+      operation: (a,b) => { return this._Add.operation(a,b) }
+    },
+    subtract: {
+      name: 'subtract',
+      operation: (a,b) => { return this._Subtract.operation(a,b) }
+    },
+    multiply: {
+      name: 'multiply',
+      operation: (a,b) => { return this._Multiply.operation(a,b) }
+    },
+    divide: {
+      name: 'divide',
+      operation: (a,b) => { return this._Divide.operation(a,b) }
+    }
+  };
 }
 
 export default CalculatorController;
-

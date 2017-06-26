@@ -8,6 +8,8 @@ import Ioperations from './Ioperations';
 class Multiply extends Ioperations {
 
   constructor(){
+    'ngInject';
+
     super();
   }
 

@@ -14,30 +14,31 @@
         </div>
 
         <div class="row row-common">
-          <button value="9" class="num" ng-click="$ctrl.userInput(9)">9</button>
-          <button value="8" class="num" ng-click="$ctrl.userInput(8)">8</button>
           <button value="7" class="num" ng-click="$ctrl.userInput(7)">7</button>
+          <button value="8" class="num" ng-click="$ctrl.userInput(8)">8</button>
+          <button value="9" class="num" ng-click="$ctrl.userInput(9)">9</button>
           <button value="X" class="btn-warning operator" ng-click="$ctrl.operationClick('multiply')">X</button>
         </div>
 
         <div class="row row-common">
-          <button value="6" class="num-bg num" ng-click="$ctrl.userInput(6)">6</button>
-          <button value="5" class="num-bg num" ng-click="$ctrl.userInput(5)">5</button>
           <button value="4" class="num-bg num" ng-click="$ctrl.userInput(4)">4</button>
+          <button value="5" class="num-bg num" ng-click="$ctrl.userInput(5)">5</button>
+          <button value="6" class="num-bg num" ng-click="$ctrl.userInput(6)">6</button>
           <button value="-" class="btn-warning operator" ng-click="$ctrl.operationClick('subtract')">-</button>
         </div>
 
 
         <div class="row row-common">
-          <button value="3" class="num-bg num" ng-click="$ctrl.userInput(3)">3</button>
-          <button value="2" class="num-bg num" ng-click="$ctrl.userInput(2)">2</button>
           <button value="1" class="num-bg num" ng-click="$ctrl.userInput(1)">1</button>
+          <button value="2" class="num-bg num" ng-click="$ctrl.userInput(2)">2</button>
+          <button value="3" class="num-bg num" ng-click="$ctrl.userInput(3)">3</button>
           <button value="+" class="btn-warning operator" ng-click="$ctrl.operationClick('add')">+</button>
         </div>
 
         <div class="row row-common">
-          <button value="0" class="btn-style num-bg num" ng-click="$ctrl.userInput(0)">0</button>
-          <button value="." class="btn-style num-bg num" ng-click="$ctrl.userInput('.')">.</button>
+          <button value="0" class="num-bg num" ng-click="$ctrl.userInput(0)">0</button>
+          <button value="." class="num-bg num" ng-click="$ctrl.userInput('.')">.</button>
+          <button value="XXX" class="btn-warning" ng-click="$ctrl.operationClick('XXX')">---!!---</button>
           <button value="=" id="calculate" class="btn-warning operator" ng-click="$ctrl.calculateResult()">=</button>
         </div>
 

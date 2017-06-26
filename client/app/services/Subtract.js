@@ -8,6 +8,8 @@ import Ioperations from './Ioperations';
 class Subtract extends Ioperations {
 
   constructor(){
+    'ngInject';
+
     super();
   }
 
