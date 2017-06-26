@@ -16,7 +16,7 @@ class CalculatorController {
     this.operationsClass = new MakeOperations();
   }
 
-  //execute when user click on number
+  //execute when user click on number--
   userInput = function(btnValue)
   {
     if (this.isNewNumber || this.output == "0")
