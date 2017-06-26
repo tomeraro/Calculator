@@ -1,3 +1,5 @@
+import ContextClass from './operations/ContextClass'
+
 //Calculator class manage the UI executions.
 //I've separated the UI manipulations from the operations Logic
 class CalculatorController {
@@ -12,8 +14,13 @@ class CalculatorController {
     this.resultUntilNow = null; ///the result until now. (left number for next operation)
     this.saveLastOperation = null; //save last operation if user clicked =,=,=
 
-    //the separate Logic class. "black box" that get numbers and calculate them
-    this.operationsClass = new MakeOperations();
+    //**** separate logic from UI ****// "black box" that get numbers and calculate them
+    this.Add = new ContextClass('add');
+    this.Subtract = new ContextClass('subtract');
+    this.Multiply = new ContextClass('multiply');
+    this.Divide = new ContextClass('divide');
+
+
   }
 
   //execute when user click on number
@@ -46,7 +53,7 @@ class CalculatorController {
     if (this.numValue)
     {
       if(this.resultUntilNow)
-        this.resultUntilNow = this.operationsClass.operations[this.currentOperationToExecute].operation(this.resultUntilNow, this.numValue);
+        this.makeCalculation(this.currentOperationToExecute, this.resultUntilNow, this.numValue);
       else
         this.resultUntilNow = this.numValue; //for the first operation only
     }
@@ -65,23 +72,7 @@ class CalculatorController {
     {
       //save last operation in case we need it later
       this.saveLastOperation = this.currentOperationToExecute;
-      //if (this.currentOperationToExecute == this.operationsClass.operations.add.name)
-      //{
-      //  this.saveLastOperation = 'add';
-      //}
-      //else if (this.currentOperationToExecute == this.operationsClass.operations.subtract.name)
-      //{
-      //  this.saveLastOperation = 'subtract';
-      //}
-      //else if (this.currentOperationToExecute == this.operationsClass.operations.multiply.name)
-      //{
-      //  this.saveLastOperation = 'multiply';
-      //}
-      //else if (this.currentOperationToExecute == this.operationsClass.operations.divide.name)
-      //{
-      //  this.saveLastOperation = 'divide';
-      //}
-      this.resultUntilNow = this.operationsClass.operations[this.currentOperationToExecute].operation(this.resultUntilNow, this.numValue);
+      this.makeCalculation(this.currentOperationToExecute, this.resultUntilNow, this.numValue);
     }
     else //user clicked = more than one time in a row
     {
@@ -89,7 +80,7 @@ class CalculatorController {
       {
         if (this.resultUntilNow)
         {
-          this.resultUntilNow = this.operationsClass.operations[this.saveLastOperation].operation(this.resultUntilNow, this.lastValue);
+          this.makeCalculation(this.saveLastOperation, this.resultUntilNow, this.lastValue);
         }
       }
       else
@@ -111,46 +102,26 @@ class CalculatorController {
     this.saveLastOperation = null;
     this.output = "0";
     this.isNewNumber = true;
+  };
+
+
+  //check the operation and execute according to our stracture
+  makeCalculation = function(operation, leftValue, rightValue)
+  {
+    if(operation == 'add')
+      this.resultUntilNow = this.Add.operationProperty.operation(leftValue, rightValue);
+
+    if(operation == 'subtract')
+      this.resultUntilNow = this.Subtract.operationProperty.operation(leftValue, rightValue);
+
+    if(operation == 'multiply')
+      this.resultUntilNow = this.Multiply.operationProperty.operation(leftValue, rightValue);
+
+    if(operation == 'divide')
+      this.resultUntilNow = this.Divide.operationProperty.operation(leftValue, rightValue);
   }
 
 }
 
 export default CalculatorController;
 
-
-//basic operations class with single responsibility: do operations.
-// will be easy to add more arithmetic operations if needed
-export class MakeOperations {
-
-  constructor() {
-    this.operations = {
-      add: {
-        name: 'add',
-        operation: function (a, b) {
-          return a + b;
-        }
-      },
-      subtract: {
-        name: 'subtract',
-        operation: function (a, b) {
-          return a - b;
-        }
-      },
-      multiply: {
-        name: 'multiply',
-        operation: function (a, b) {
-          return a * b;
-        }
-      },
-      divide: {
-        name: 'divide',
-        operation: function (a, b) {
-          if(b == 0){
-            return NaN;
-          }
-          return a / b;
-        }
-      }
-    };
-  }
-}
